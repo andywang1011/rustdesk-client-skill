@@ -42,9 +42,10 @@ jobs:
           components: rustfmt
 
       - uses: Swatinem/rust-cache@v2
-        working-directory: rustdesk-src
         with:
           prefix-key: bridge
+          workspaces: |
+            ./rustdesk-src
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2.12.0
@@ -99,9 +100,10 @@ jobs:
           components: rustfmt
 
       - uses: Swatinem/rust-cache@v2
-        working-directory: rustdesk-src
         with:
           prefix-key: windows
+          workspaces: |
+            ./rustdesk-src
 
       - name: Install Flutter
         id: flutter
