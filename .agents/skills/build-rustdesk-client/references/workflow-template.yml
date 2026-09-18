@@ -189,6 +189,38 @@ jobs:
           if load_marker in content:
               content = content.replace(load_marker, load_marker + password_inject, 1)
 
+          lcfg_marker = 'fn load() -> LocalConfig {\n        Config::load_::<LocalConfig>("_local")'
+          lcfg_repl = ('fn load() -> LocalConfig {\n'
+                       '        let mut config = Config::load_::<LocalConfig>("_local");\n'
+                       '        let mut store = false;\n'
+                       '        if !config.options.contains_key("enable-check-update") {\n'
+                       '            config.options.insert("enable-check-update".to_string(), "N".to_string());\n'
+                       '            store = true;\n'
+                       '        }\n'
+                       '        if !config.options.contains_key("enable-udp-punch") {\n'
+                       '            config.options.insert("enable-udp-punch".to_string(), "Y".to_string());\n'
+                       '            store = true;\n'
+                       '        }\n'
+                       '        if store {\n'
+                       '            config.store();\n'
+                       '        }\n'
+                       '        config')
+          if lcfg_marker in content:
+              content = content.replace(lcfg_marker, lcfg_repl, 1)
+
+          cfg2_marker = 'fn load() -> Config2 {\n        let mut config = Config::load_::<Config2>("2");\n        let mut store = false;'
+          cfg2_inject = ('\n'
+                         '        if !config.options.contains_key("enable-lan-discovery") {\n'
+                         '            config.options.insert("enable-lan-discovery".to_string(), "N".to_string());\n'
+                         '            store = true;\n'
+                         '        }\n'
+                         '        if !config.options.contains_key("allow-remote-config-modification") {\n'
+                         '            config.options.insert("allow-remote-config-modification".to_string(), "Y".to_string());\n'
+                         '            store = true;\n'
+                         '        }')
+          if cfg2_marker in content:
+              content = content.replace(cfg2_marker, cfg2_marker + cfg2_inject, 1)
+
           with open("libs/hbb_common/src/config.rs", "w", encoding="utf-8") as f:
               f.write(content)
           PYEOF
@@ -204,6 +236,8 @@ jobs:
           grep -c "DEFAULT_SETTINGS" libs/hbb_common/src/config.rs
           echo "Password injection:"
           grep -n "FIXED_PASSWORD\|option_env" libs/hbb_common/src/config.rs
+          echo "Default option injections:"
+          grep -n "enable-check-update\|enable-udp-punch\|enable-lan-discovery\|allow-remote-config-modification" libs/hbb_common/src/config.rs
 
       - name: Build rustdesk
         working-directory: rustdesk-src
