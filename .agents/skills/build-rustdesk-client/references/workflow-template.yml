@@ -2,8 +2,6 @@ name: Build RustDesk Windows
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
 
 env:
   # ===== VALUES are read from GitHub Secrets (set by the build script) =====
