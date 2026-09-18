@@ -38,6 +38,12 @@ Sensitive values (server addresses, password, public key, …) never appear in t
 - `VCPKG_COMMIT_ID` is pinned to `9e593bb18ea69cc5095e012465dcd675a822ed0d` to match the current `vcpkg.json` baseline in `rustdesk/rustdesk`. If upstream bumps the baseline, update both in lockstep (see `flutter-build.yml` upstream).
 - If the upstream `libs/hbb_common/src/config.rs` patterns change, update the Python regexes in `references/workflow-template.yml` (see the "Upstream Verification" section of `SKILL.md`).
 
+## Client customization reference
+
+- [`客户端修改参考.md`](./客户端修改参考.md) — a consolidated, formatted reference of all
+  source-level client customizations (server/account, Flutter UI trimming, home-page
+  logo, default options, security/password).
+
 ## Attribution / License
 
 Original skill: <https://www.modelscope.cn/skills/zhm1321391634/build-windows-rustdesk-client>
